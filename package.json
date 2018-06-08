@@ -1,0 +1,36 @@
+{
+  "name": "storage-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist --copy-files",
+    "start": "npm run build && node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Adam Johnston",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^1.7.0",
+    "async": "^2.6.1",
+    "fs-extra": "^6.0.1",
+    "pub-sub-redis": "0.0.2"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      "syntax-dynamic-import",
+      "dynamic-import-node",
+      "transform-object-rest-spread"
+    ]
+  }
+}
