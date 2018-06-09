@@ -4,6 +4,7 @@ import { uploadFile } from './file-operations'
 import { queue } from 'async'
 import { resolve as resolvePath } from 'path'
 import { cwd } from 'process'
+import { manageStorage } from './manage-storage'
 
 export const localStorage = ({
 	publish,
@@ -42,6 +43,10 @@ export const doPhotoUpload = ({ msg, getSetting }) => new Promise((resolve, reje
 		return
 	})
 	.then(() => uploadFile({ storage, bucketName, file, location }))
+	.then(() => manageStorage({
+		location:  resolvePath(cwd(), 'buckets', bucketName),
+		maxFiles: 20
+	}))
 	.then(() => {
 		console.log('Upload successful')
 		resolve({
