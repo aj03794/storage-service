@@ -1,5 +1,5 @@
 {
-	"cloudStorage": "local",
+	"cloudStorage": "gcp",
 	"bucketName": "smart-hms-photos",
 	"googleApplicationCredentials": "gcp-service-account.json",
 	"pubsub": "redis"
