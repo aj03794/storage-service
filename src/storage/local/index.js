@@ -4,13 +4,14 @@ import { uploadFile } from './file-operations'
 import { queue } from 'async'
 import { resolve as resolvePath } from 'path'
 import { cwd } from 'process'
+import { manageStorage } from './manage-storage'
 
 export const localStorage = ({
 	publish,
 	subscribe,
 	getSetting
 }) => {
-	console.log('-------------------------')
+	console.log('Local Storage')
 	const queue = q({ publish })
 	subscribe({
 		channel: 'cloud storage'
@@ -25,16 +26,9 @@ export const localStorage = ({
 }
 
 export const doPhotoUpload = ({ msg, getSetting }) => new Promise((resolve, reject) => {
-	console.log('-------------------------')
-	console.log('doPhotoUpload - local')
+	console.log('doPhotoUpload - Local')
 	const bucketName = getSetting('bucketName')
-	console.log('MSG', msg)
 	const { folder, name: file, location } = JSON.parse(msg.data[1])
-	console.log('folder', folder)
-	console.log('LOCATION', location)
-	console.log('FILE', file)
-
-	console.log('===========>', location)
 	const storage = new Storage({
 		projectId: getSetting('projectId')
 	})
@@ -49,6 +43,10 @@ export const doPhotoUpload = ({ msg, getSetting }) => new Promise((resolve, reje
 		return
 	})
 	.then(() => uploadFile({ storage, bucketName, file, location }))
+	.then(() => manageStorage({
+		location:  resolvePath(cwd(), 'buckets', bucketName),
+		maxFiles: 20
+	}))
 	.then(() => {
 		console.log('Upload successful')
 		resolve({
