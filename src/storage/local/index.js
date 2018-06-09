@@ -5,11 +5,18 @@ import { queue } from 'async'
 import { resolve as resolvePath } from 'path'
 import { cwd } from 'process'
 import { manageStorage } from './manage-storage'
+import dateTime from 'date-time'
+
+const timestamp = () => {
+    console.log('DATETIME', dateTime({ local: true }))
+    return dateTime({ local: true })
+}
 
 export const localStorage = ({
 	publish,
 	subscribe,
-	getSetting
+	getSetting,
+	slack
 }) => {
 	console.log('Local Storage')
 	const queue = q({ publish })
@@ -20,12 +27,12 @@ export const localStorage = ({
 		filterMsgs(msg => {
 			return msg.data
 		}).subscribe(msg => {
-			return enqueue({ msg, queue, getSetting })
+			return enqueue({ msg, queue, getSetting, slack })
 		})
 	})
 }
 
-export const doPhotoUpload = ({ msg, getSetting }) => new Promise((resolve, reject) => {
+export const doPhotoUpload = ({ msg, getSetting, slack }) => new Promise((resolve, reject) => {
 	console.log('doPhotoUpload - Local')
 	const bucketName = getSetting('bucketName')
 	const { folder, name: file, location } = JSON.parse(msg.data[1])
@@ -49,23 +56,26 @@ export const doPhotoUpload = ({ msg, getSetting }) => new Promise((resolve, reje
 	}))
 	.then(() => {
 		console.log('Upload successful')
-		resolve({
-			meta: {},
-			data: {
-				cloudProvider: 'local',
-				upload: 'successful'
-			}
+		slack({
+            slackMsg: {
+				meta: {
+					timestamp: timestamp()
+				},
+				msg: 'Photo upload successful - local',
+				fileName: file
+            }
 		})
+		resolve()
 	})
 })
 
-export const q = ({ publish }) => queue(({ msg, getSetting }, cb) => {
-  doPhotoUpload({ msg, getSetting })
+export const q = ({ publish }) => queue((data, cb) => {
+  doPhotoUpload(data)
 	.then(cb)
 })
 
-export const enqueue = ({ msg, queue, getSetting }) => new Promise((resolve, reject) => {
+export const enqueue = ({ msg, queue, getSetting, slack }) => new Promise((resolve, reject) => {
     console.log('Queueing message: ', msg)
-	queue.push({ msg, getSetting })
+	queue.push({ msg, getSetting, slack })
     return resolve()
 })
