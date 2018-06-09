@@ -1,6 +1,6 @@
 import { getSetting } from './settings'
 import { redis } from 'pub-sub-redis'
-import { slack as createSlack } from './slack'
+import { slack as slackCreator } from './slack'
 
 const cloudStorageProvider = getSetting('cloudStorage')
 const pubsubProvider = getSetting('pubsub')
@@ -25,7 +25,7 @@ Promise.all(imports)
         { publish },
         { subscribe }
     ]) => {
-        const slack = createSlack({ publish })
+        const slack = slackCreator({ publish })
         const pubsubFunctions = {
             publish,
             subscribe

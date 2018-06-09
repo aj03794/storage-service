@@ -31,7 +31,7 @@ export const gcpCloudStorage = ({
 	})
 }
 
-export const doPhotoUpload = ({ msg, getSetting }) => new Promise((resolve, reject) => {
+export const doPhotoUpload = ({ slack, msg, getSetting }) => new Promise((resolve, reject) => {
 	console.log('-------------------------')
 	console.log('doPhotoUpload - GCP')
 	// const bucketName = process.env.BUCKET_NAME
