@@ -22,7 +22,7 @@
     "async": "^2.6.1",
     "date-time": "^2.1.0",
     "fs-extra": "^6.0.1",
-    "pub-sub-redis": "0.0.2"
+    "pub-sub-redis": "0.0.3"
   },
   "babel": {
     "presets": [
