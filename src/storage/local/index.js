@@ -19,6 +19,8 @@ export const localStorage = ({
 	slack
 }) => {
 	console.log('Local Storage')
+	const machineUuid = process.env.UUID || 'dev'
+	console.log('machineUuid', machineUuid)
 	const queue = q({ publish })
 	subscribe({
 		channel: 'cloud storage'
@@ -27,8 +29,8 @@ export const localStorage = ({
 		filterMsgs(msg => {
 			if (msg.data) {
 				const { uuid } = JSON.parse(msg.data[1])
-				console.log('UUID', uuid)
-				if (uuid !== (process.env.UUID || 'dev')) {
+				console.log('Incoming UUID', uuid)
+				if (uuid !== machineUuid) {
 					return false
 				}
 				return msg.data && uuid
@@ -70,7 +72,8 @@ export const doPhotoUpload = ({ msg, getSetting, slack }) => new Promise((resolv
 					timestamp: timestamp()
 				},
 				msg: 'Photo upload successful - local',
-				fileName: file
+				fileName: file,
+				uuid: process.env.UUID
             }
 		})
 		resolve()
