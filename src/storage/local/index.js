@@ -25,7 +25,15 @@ export const localStorage = ({
 	})
 	.then(({ allMsgs, filterMsgs }) => {
 		filterMsgs(msg => {
-			return msg.data
+			if (msg.data) {
+				const { uuid } = JSON.parse(msg.data[1])
+				console.log('UUID', uuid)
+				if (uuid !== (process.env.UUID || 'dev')) {
+					return false
+				}
+				return msg.data && uuid
+			}
+			return false
 		}).subscribe(msg => {
 			return enqueue({ msg, queue, getSetting, slack })
 		})

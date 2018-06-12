@@ -16,7 +16,9 @@ Promise.all(imports)
     { [pubsubProvider]: pubsub },
     { [cloudStorageProvider] : cloudStorage }
 ]) => {
-    const { publisherCreator, subscriberCreator } = pubsub()
+    const { publisherCreator, subscriberCreator } = pubsub({
+        host: process.argv[2] === 'dev' ? '127.0.0.1' : 'main.local'
+    })
     return Promise.all([
         publisherCreator(),
         subscriberCreator()
