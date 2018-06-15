@@ -62,7 +62,7 @@ export const doPhotoUpload = ({ msg, getSetting, slack }) => new Promise((resolv
 	.then(() => uploadFile({ storage, bucketName, file, location }))
 	.then(() => manageStorage({
 		location:  resolvePath(cwd(), 'buckets', bucketName),
-		maxFiles: 20
+		maxFiles: getSetting('maxFiles')
 	}))
 	.then(() => {
 		console.log('Upload successful')
