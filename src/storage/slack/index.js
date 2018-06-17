@@ -12,7 +12,7 @@ const timestamp = () => {
 
 export const slackStorage = ({
 	allGcpMsgs,
-	filterGcpMsgs,
+    filterGcpMsgs,
 	getSetting,
 	slack
 }) => {

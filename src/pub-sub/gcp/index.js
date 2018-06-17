@@ -14,15 +14,14 @@ export const gcp = ({
   } = createSubject()
 
   const gcpCreds = getSetting('googleApplicationCredentials')
-  const subscription = 'projects/smart-home-monitoring-system/subscriptions/upload-photos'
+  const subscriptionName = 'projects/smart-home-monitoring-system/subscriptions/upload-photos'
 	const keyFilename = resolvePath(cwd(), gcpCreds)
 	const pubsub = new PubSub({
 		keyFilename
   })
-  const subscription = pubsub.subscription(subscription)
+  const subscription = pubsub.subscription(subscriptionName)
 
   const messageHandler = message => {
-    console.log(`Received message`, message)
     console.log('message.data', JSON.parse(message.data.toString('utf-8')))
     next({
       meta: {
@@ -43,4 +42,3 @@ export const gcp = ({
   })
 
 })
-

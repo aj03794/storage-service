@@ -24,25 +24,21 @@ Promise.all(imports)
     })
     return Promise.all([
         publisherCreator(),
-        subscriberCreator()
+        subscriberCreator(),
+        gcp({ getSetting })
     ])
     .then(([
         { publish },
-        { subscribe }
+        { subscribe },
+        { allGcpMsgs, filterGcpMsgs }
     ]) => {
         const slack = slackCreator({ publish })
-        gcp({ getSetting })
-        .then(({
-            allGcpMsgs,
-            filterGcpMsgs
-        }) => {
-            slackStorage({ allGcpMsgs, filterGcpMsgs, getSetting, slack })
-        })
+        slackStorage({ allGcpMsgs, filterGcpMsgs, getSetting, slack })
         const pubsubFunctions = {
             publish,
             subscribe
         }
-        // cloudStorage({ ...pubsubFunctions, getSetting, slack })
+        cloudStorage({ ...pubsubFunctions, getSetting, slack })
         return
     })
 })
