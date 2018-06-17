@@ -19,11 +19,14 @@
     "babel-preset-env": "^1.7.0"
   },
   "dependencies": {
+    "@google-cloud/pubsub": "^0.18.0",
     "@google-cloud/storage": "^1.7.0",
     "async": "^2.6.1",
+    "create-subject-with-filter": "0.0.5",
     "date-time": "^2.1.0",
     "fs-extra": "^6.0.1",
-    "pub-sub-redis": "0.0.5"
+    "pub-sub-redis": "0.0.5",
+    "zip-dir": "^1.0.2"
   },
   "babel": {
     "presets": [
